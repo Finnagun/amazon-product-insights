@@ -124,18 +124,14 @@ Base original: `amazon.csv` (Kaggle), **1.465 linhas** e **16 colunas**, com pre
 - O CSV mantém `product_link` original e acrescenta `product_link_limpo` (sem rastreio).
 - Não foi preciso extrair o nome do produto a partir do link, porque `product_name` existe na base.
 
-## 6. Nome do produto na tabela de consulta
-
-`product_name` tem em média 127 caracteres, e 90% passam de 60. A coluna `nome_curto` (`dax/medidas.dax`) corta o texto no primeiro `|` (onde a base separa o nome das especificações) e limita a 50 caracteres. O nome completo aparece na dica de ferramenta.
-
-## 7. Moeda
+## 6. Moeda
 
 Os preços originais estão em **rupias (₹)**. Para a análise, os valores monetários foram convertidos para **US$** à taxa de **0,0105 US$ por ₹** (cerca de ₹ 95 por dólar), cotação de **08/10/2026**, aplicada **no Power Query**: as colunas `actual_price_dollar` e `discounted_price_dollar` multiplicam os preços em rupias pelo parâmetro `TaxaINRUSD`, que concentra a taxa em um único lugar.
 
-## 8. Variantes de um mesmo anúncio
+## 7. Variantes de um mesmo anúncio
 
 > **Decisão do grupo:** manter a análise por produto (ASIN), sem agrupar variantes. Os totais de avaliações somam as variantes e isso é tratado como limitação (ver README).
 
-## 9. Limitação da amostra de reviews
+## 8. Limitação da amostra de reviews
 
 As reviews em texto são uma **amostra** (cerca de 8 por produto, no máximo 9), enquanto `rating_count` reflete a população (dezenas de milhares por produto). A análise de texto serve para insights qualitativos e comparativos, não para estimar volume de clientes.
