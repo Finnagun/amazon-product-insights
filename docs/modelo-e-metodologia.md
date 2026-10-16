@@ -90,16 +90,14 @@ Limite conhecido: o filtro vai da `dProdutos` para as fatos, então um tema sele
 
 ### Quadrantes (Estrela, Oportunidade, Atenção, Risco)
 
-> **Regra reconstruída a partir dos números do dashboard. O grupo deve confirmar.**
+Coluna calculada `quadrante` (`dax/medidas.dax`). Cada eixo é dividido pela **mediana** do portfólio: nota 4,1 e `rating_count` 4.740. Valores iguais à mediana ficam no lado "alto".
 
-Eixo de engajamento: `rating_count` acima ou abaixo da **mediana** (4.740). Eixo de satisfação: nota acima de 4,0 ou até 4,0.
-
-| | Nota acima de 4,0 | Nota até 4,0 |
+| | Nota maior ou igual a 4,1 | Nota abaixo de 4,1 |
 |---|---|---|
-| **Engajamento alto** | Estrela (478) | Risco (197) |
-| **Engajamento baixo** | Oportunidade (373) | Atenção (303) |
+| **Engajamento alto** (≥ 4.740) | Estrela (478) | Risco (197) |
+| **Engajamento baixo** (< 4.740) | Oportunidade (373) | Atenção (303) |
 
-**Valores em branco** são tratados como zero pelo DAX: o produto sem nota válida cai em **Atenção** (nota "baixa") e os 2 produtos sem `rating_count` caem em engajamento "baixo". Pendência: classificar esses 3 como "Sem dados".
+**Valores em branco** são tratados como zero pelo DAX e caem no lado "baixo": o produto sem nota válida (`B08L12N5H1`) e o produto sem `rating_count` e com nota 3,0 (`B0B94JPY2N`) entram em Atenção, e o sem `rating_count` e com nota 5,0 (`B0BQRJ3C47`) entra em Oportunidade.
 
 ## 4. Ressalvas gerais para a leitura do dashboard
 

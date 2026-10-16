@@ -130,7 +130,7 @@ Base original: `amazon.csv` (Kaggle), **1.465 linhas** e **16 colunas**, com pre
 
 ## 7. Moeda
 
-Os preços originais estão em **rupias (₹)**. Para a análise, os valores monetários foram convertidos para **US$** à taxa de **0,0105 US$ por ₹** (cerca de ₹ 95 por dólar), cotação de **08/10/2026**, aplicada **no Power Query**.
+Os preços originais estão em **rupias (₹)**. Para a análise, os valores monetários foram convertidos para **US$** à taxa de **0,0105 US$ por ₹** (cerca de ₹ 95 por dólar), cotação de **08/10/2026**, aplicada **no Power Query**: as colunas `actual_price_dollar` e `discounted_price_dollar` multiplicam os preços em rupias pelo parâmetro `TaxaINRUSD`, que concentra a taxa em um único lugar.
 
 ## 8. Variantes de um mesmo anúncio
 

@@ -123,4 +123,22 @@ VAR limite = 50
 RETURN
     IF(LEN(antes) > limite, TRIM(LEFT(antes, limite)) & "…", antes)
 
-// Pendente: colar a fórmula das colunas quadrante, actual_price_dollar e discounted_price_dollar
+// Quadrantes: cruzam nota e engajamento pelas MEDIANAS do portfólio (nota 4,1; rating_count 4.740).
+// Valores em branco são tratados como zero pelo DAX: o produto sem nota válida (B08L12N5H1) e o
+// produto sem rating_count (B0B94JPY2N) caem em "Atenção"; o sem rating_count com nota 5,0
+// (B0BQRJ3C47) cai em "Oportunidade".
+quadrante =
+VAR MedNota = MEDIAN ( dProdutos[rating] )
+VAR MedAval = MEDIAN ( dProdutos[rating_count] )
+RETURN
+    SWITCH (
+        TRUE (),
+        dProdutos[rating] >= MedNota && dProdutos[rating_count] >= MedAval, "Estrela",
+        dProdutos[rating] <  MedNota && dProdutos[rating_count] >= MedAval, "Risco",
+        dProdutos[rating] >= MedNota, "Oportunidade",
+        "Atenção"
+    )
+
+// Observação: actual_price_dollar e discounted_price_dollar NÃO são colunas DAX. São criadas no
+// Power Query (dProdutos), multiplicando actual_price_rupia e discounted_price_rupia pelo
+// parâmetro TaxaINRUSD.
