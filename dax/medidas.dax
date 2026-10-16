@@ -1,0 +1,59 @@
+// Medidas e colunas calculadas criadas para a análise de texto e de engajamento.
+// Pendência do grupo: acrescentar aqui as medidas dos KPIs (Total de Produtos, Total de Avaliações,
+// Nota Média, Desconto Médio, etc.) copiando do .pbix.
+
+// ---------- Colunas calculadas (dProdutos) ----------
+
+grupo_nota =
+VAR nota = dProdutos[rating]
+RETURN
+    IF(
+        ISBLANK(nota),
+        BLANK(),
+        SWITCH(
+            TRUE(),
+            nota <= 3.9, "Ruim",
+            nota > 4.2, "Bom",
+            "Intermediário"
+        )
+    )
+
+nome_curto =
+VAR t = TRIM(dProdutos[product_name])
+VAR pos = SEARCH("|", t, 1, 0)
+VAR antes = TRIM(IF(pos > 0, LEFT(t, pos - 1), t))
+VAR limite = 50
+RETURN
+    IF(LEN(antes) > limite, TRIM(LEFT(antes, limite)) & "…", antes)
+
+// ---------- Medidas (dPalavras) ----------
+
+Menções = SUM(dPalavras[qtd])
+
+Produtos na seleção = COUNTROWS(dProdutos)
+
+Produtos com menção = DISTINCTCOUNT(dPalavras[product_id])
+
+% Produtos que mencionam = DIVIDE([Produtos com menção], [Produtos na seleção])
+
+Menções por produto = DIVIDE([Menções], [Produtos na seleção])
+
+// ---------- Comparativo produtos bons x ruins ----------
+
+% Produtos Bom = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Bom")
+
+% Produtos Ruim = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Ruim")
+
+Mais em Ruim (p.p.) = ([% Produtos Ruim] - [% Produtos Bom]) * 100
+
+Mais em Bom (p.p.) = ([% Produtos Bom] - [% Produtos Ruim]) * 100
+
+// ---------- Engajamento e quadrantes ----------
+
+Mediana de avaliações = MEDIAN(dProdutos[rating_count])
+
+% da categoria em Atenção/Risco =
+DIVIDE(
+    [Total Produtos],
+    CALCULATE([Total Produtos], REMOVEFILTERS(dProdutos[quadrante]))
+)
