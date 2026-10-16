@@ -130,25 +130,12 @@ Base original: `amazon.csv` (Kaggle), **1.465 linhas** e **16 colunas**, com pre
 
 ## 7. Moeda
 
-Os preços originais estão em **rupias (₹)**. O dashboard mostra valores em US$ (desconto médio de US$ 25,05, contra ₹ 2.385,86 na base, o que equivale a cerca de ₹ 95 por dólar).
-
-> **Pendência:** registrar aqui a taxa de câmbio, a data e onde a conversão é aplicada (Power Query ou DAX).
+Os preços originais estão em **rupias (₹)**. Para a análise, os valores monetários foram convertidos para **US$** à taxa de **0,0105 US$ por ₹** (cerca de ₹ 95 por dólar), cotação de **08/10/2026**, aplicada **no Power Query**.
 
 ## 8. Variantes de um mesmo anúncio
 
-`rating` e `rating_count` pertencem ao **anúncio**. Variantes (cor, tamanho, memória) com ASIN diferente herdam os mesmos valores. Exemplo: três cabos HDMI com exatamente 426.973 avaliações e nota 4,40.
-
-- 253 produtos compartilham exatamente a mesma contagem e nota com outro produto (96 grupos).
-- Somar `rating_count` linha a linha conta essas avaliações mais de uma vez: **23,8 milhões** no total, contra cerca de **18,2 milhões** se cada grupo contar uma vez (limite superior, já que coincidências em contagens pequenas são possíveis).
-
-> **Decisão pendente:** manter a análise por produto (ASIN), com nota de rodapé nos totais de avaliações, ou agrupar variantes.
+> **Decisão do grupo:** manter a análise por produto (ASIN), sem agrupar variantes. Os totais de avaliações somam as variantes e isso é tratado como limitação (ver README).
 
 ## 9. Limitação da amostra de reviews
 
 As reviews em texto são uma **amostra** (cerca de 8 por produto, no máximo 9), enquanto `rating_count` reflete a população (dezenas de milhares por produto). A análise de texto serve para insights qualitativos e comparativos, não para estimar volume de clientes.
-
-## Pendências
-
-- [ ] Registrar a taxa de câmbio e a data (seção 7).
-- [ ] Decidir o tratamento das variantes (seção 8).
-- [ ] Exportar o código de `base_bruta` e `dProdutos` para `powerquery/`.

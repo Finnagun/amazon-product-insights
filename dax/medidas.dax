@@ -1,8 +1,104 @@
-// Medidas e colunas calculadas criadas para a análise de texto e de engajamento.
-// Pendência do grupo: acrescentar aqui as medidas dos KPIs (Total de Produtos, Total de Avaliações,
-// Nota Média, Desconto Médio, etc.) copiando do .pbix.
+// =====================================================================
+// Medidas do modelo, agrupadas pelas pastas de exibição da tabela "Medidas".
+// A pasta de cada grupo está indicada no cabeçalho (use "\" para subpastas).
+// =====================================================================
 
-// ---------- Colunas calculadas (dProdutos) ----------
+
+// ---------------------------------------------------------------------
+// Pasta: 01 KPIs
+// ---------------------------------------------------------------------
+
+Total de produtos = DISTINCTCOUNT(dProdutos[product_id])
+
+Total de avaliações = SUM(dProdutos[rating_count])
+
+// Média simples das notas dos produtos (cada produto pesa igual)
+Nota média = AVERAGE(dProdutos[rating])
+
+// Diferença média entre preço original e preço com desconto, em US$
+Desconto médio (US$) =
+AVERAGEX(
+    dProdutos,
+    dProdutos[actual_price_dollar] - dProdutos[discounted_price_dollar]
+)
+
+Desconto médio (%) = AVERAGE(dProdutos[discount_percentage])
+
+
+// ---------------------------------------------------------------------
+// Pasta: 02 Engajamento
+// ---------------------------------------------------------------------
+
+Média de avaliações = AVERAGE(dProdutos[rating_count])
+
+// Preferida à média: a distribuição de rating_count tem cauda muito longa
+Mediana de avaliações = MEDIAN(dProdutos[rating_count])
+
+
+// ---------------------------------------------------------------------
+// Pasta: 03 Concentração e quadrantes
+// ---------------------------------------------------------------------
+
+// Curva de Pareto por categoria. O denominador ignora os filtros (ALL), então
+// o percentual é sempre sobre o total de avaliações do portfólio.
+% acumulado de avaliações =
+VAR QtdAtual = [Total de avaliações]
+VAR Acumulado =
+    SUMX(
+        FILTER(
+            ALLSELECTED(dProdutos[categoria_principal]),
+            [Total de avaliações] >= QtdAtual
+        ),
+        [Total de avaliações]
+    )
+RETURN
+    DIVIDE(Acumulado, CALCULATE([Total de avaliações], ALL(dProdutos)))
+
+// Participação da seleção no portfólio, ignorando só o filtro de quadrante
+% do portfólio =
+DIVIDE(
+    [Total de produtos],
+    CALCULATE([Total de produtos], REMOVEFILTERS(dProdutos[quadrante]))
+)
+
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Base
+// ---------------------------------------------------------------------
+
+Menções = SUM(dPalavras[qtd])
+
+Produtos com menção = DISTINCTCOUNT(dPalavras[product_id])
+
+// Equivale a [Total de produtos] no contexto da dProdutos
+Produtos na seleção = COUNTROWS(dProdutos)
+
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Temas
+// ---------------------------------------------------------------------
+
+% Produtos que mencionam = DIVIDE([Produtos com menção], [Produtos na seleção])
+
+Menções por produto = DIVIDE([Menções], [Produtos na seleção])
+
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Bons vs ruins
+// ---------------------------------------------------------------------
+
+% Produtos Bom = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Bom")
+
+% Produtos Ruim = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Ruim")
+
+Mais em Bom (p.p.) = ([% Produtos Bom] - [% Produtos Ruim]) * 100
+
+Mais em Ruim (p.p.) = ([% Produtos Ruim] - [% Produtos Bom]) * 100
+
+
+// =====================================================================
+// Colunas calculadas (dProdutos)
+// =====================================================================
 
 grupo_nota =
 VAR nota = dProdutos[rating]
@@ -18,6 +114,7 @@ RETURN
         )
     )
 
+// Usada na tabela de consulta do Portfólio (se existir no modelo)
 nome_curto =
 VAR t = TRIM(dProdutos[product_name])
 VAR pos = SEARCH("|", t, 1, 0)
@@ -26,34 +123,4 @@ VAR limite = 50
 RETURN
     IF(LEN(antes) > limite, TRIM(LEFT(antes, limite)) & "…", antes)
 
-// ---------- Medidas (dPalavras) ----------
-
-Menções = SUM(dPalavras[qtd])
-
-Produtos na seleção = COUNTROWS(dProdutos)
-
-Produtos com menção = DISTINCTCOUNT(dPalavras[product_id])
-
-% Produtos que mencionam = DIVIDE([Produtos com menção], [Produtos na seleção])
-
-Menções por produto = DIVIDE([Menções], [Produtos na seleção])
-
-// ---------- Comparativo produtos bons x ruins ----------
-
-% Produtos Bom = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Bom")
-
-% Produtos Ruim = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Ruim")
-
-Mais em Ruim (p.p.) = ([% Produtos Ruim] - [% Produtos Bom]) * 100
-
-Mais em Bom (p.p.) = ([% Produtos Bom] - [% Produtos Ruim]) * 100
-
-// ---------- Engajamento e quadrantes ----------
-
-Mediana de avaliações = MEDIAN(dProdutos[rating_count])
-
-% da categoria em Atenção/Risco =
-DIVIDE(
-    [Total Produtos],
-    CALCULATE([Total Produtos], REMOVEFILTERS(dProdutos[quadrante]))
-)
+// Pendente: colar a fórmula das colunas quadrante, actual_price_dollar e discounted_price_dollar

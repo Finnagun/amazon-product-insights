@@ -41,12 +41,8 @@ Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analyt
 
 ## Principais achados
 
-- **O portfólio é concentrado:** Electronics, Computers&Accessories e Home&Kitchen somam 98,9% das avaliações (Electronics sozinha, 59,7%).
-- **As notas se agrupam em torno de 4,1:** cerca de 74% dos produtos têm nota entre 3,8 e 4,3.
-- **Desconto alto anda junto com menos engajamento:** a mediana de avaliações cai de 7,2 mil (até 25% de desconto) para 3,0 mil (50% a 75%), e a nota média vai de 4,17 para 4,00. É uma associação, não uma causa.
-- **As reviews falam de qualidade e preço** (citados em cerca de 87% dos produtos), bem mais do que de logística (29%) e atendimento (31%).
-- **Produtos bons e ruins se separam por problemas e pós-venda, não por preço:** os ruins citam mais insatisfação (32,4% contra 17,9%), defeito e falha (27,4% contra 16,7%) e devolução e troca (26,2% contra 16,5%); os bons citam mais logística (34,8% contra 23,2%) e atendimento (33,7% contra 25,3%).
-- **Cerca de 37% do portfólio (500 produtos) está em Atenção ou Risco.** Electronics concentra o Risco, e Home&Kitchen concentra a Atenção.
+> _A completar pelo grupo._
+
 
 ## Recomendações
 
