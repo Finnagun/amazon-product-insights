@@ -52,7 +52,7 @@ Base original: `amazon.csv` (Kaggle), **1.465 linhas** e **16 colunas**, com pre
 ## 3. Divisão da coluna `category`
 
 - `category` é uma hierarquia separada por `|` (ex.: `Electronics|HomeTheater,TV&Video|Televisions|SmartTelevisions`), com **2 a 7 níveis**.
-- **Decisão:** dividida em 7 colunas (`categoria_principal`, `subcategoria`, `categoria_nivel3` a `categoria_nivel7`).
+- **Decisão:** dividida em 5 colunas (`categoria_principal`, `categoria_nivel2`, `categoria_nivel3` a `categoria_nivel5`).
 - Nulos esperados por profundidade da hierarquia (produtos únicos):
 
 | Coluna | Nulos |

@@ -50,14 +50,8 @@ Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analyt
 
 ## Modelo de dados
 
-```mermaid
-erDiagram
-    dProdutos ||--o{ fReview : "product_id"
-    dProdutos ||--o{ dPalavras : "product_id"
-    dTemas ||--o{ dPalavras : "palavra"
-    dProdutos ||--|| dReviewTexto : "product_id"
-    dProdutos ||--|| dProduct_link_img : "product_id"
-```
+![Modelo de dados](docs/img/modelo-de-dados.png)
+   
 
 Detalhes, granularidade de cada tabela e justificativa em [`docs/modelo-e-metodologia.md`](docs/modelo-e-metodologia.md).
 
@@ -87,6 +81,7 @@ python scripts/corrige_links.py data/raw/amazon.csv data/processed/links_corrigi
 ├── docs/
 │   ├── decisoes-de-dados.md        # limpeza e tratamento, com os números
 │   └── modelo-e-metodologia.md     # modelo, análise de texto e segmentações
+|   └── img/              # modelo de dados
 ├── powerquery/           # código M de cada consulta
 ├── dax/                  # medidas e colunas calculadas
 ├── scripts/              # corrige_links.py

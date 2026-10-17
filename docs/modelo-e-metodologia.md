@@ -2,14 +2,7 @@
 
 ## 1. Modelo de dados
 
-```mermaid
-erDiagram
-    dProdutos ||--o{ fReview : "product_id"
-    dProdutos ||--o{ dPalavras : "product_id"
-    dTemas ||--o{ dPalavras : "palavra"
-    dProdutos ||--|| dReviewTexto : "product_id"
-    dProdutos ||--|| dProduct_link_img : "product_id"
-```
+![Modelo de dados](img/modelo-de-dados.png)
 
 | Tabela | Uma linha representa | Linhas |
 |---|---|---|
@@ -84,9 +77,13 @@ Limite conhecido: o filtro vai da `dProdutos` para as fatos, então um tema sele
 | Bom | nota acima de 4,2 | 419 |
 | (em branco) | produto sem nota válida | 1 |
 
+### Compartimentos de nota (histograma)
+
+O histograma "Distribuição de Notas" da página Portfólio usa o campo `avaliação`, criado pela interface do Power BI (não é fórmula DAX). Ele agrupa a nota (`rating`) em compartimentos de **0,1** um para cada valor de nota
+
 ### Faixas de desconto
 
-`0% a 25%`, `25% a 50%`, `50% a 75%` e `75% ou mais`, sobre `discount_percentage` (o limite inferior de cada faixa é incluído).
+Coluna calculada `faixa_desconto` (`dax/medidas.dax`), sobre `discount_percentage`: `0% - 25%` (228 produtos), `25% - 50%` (461), `50% - 75%` (507) e `75% ou mais` (155). O limite inferior de cada faixa é incluído.
 
 ### Quadrantes (Estrela, Oportunidade, Atenção, Risco)
 
