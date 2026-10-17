@@ -2,7 +2,7 @@
 
 Dashboard em Power BI que analisa o portfólio de produtos de um marketplace (Amazon Índia) e a percepção dos clientes, relacionando **preço → desconto → engajamento → satisfação**.
 
-Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analytics (DTAT), desenvolvido pelo **Grupo 22**.
+Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analytics (DTAT) - FIAP, desenvolvido pelo **Grupo 22**.
 
 ## Pergunta de negócio
 
