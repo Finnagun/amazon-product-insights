@@ -1,0 +1,64 @@
+// Modelo de dados - Amazon Product Insights
+
+Table dProdutos [headercolor: #2E75B6] {
+  product_id varchar [pk, note: '1 linha por produto']
+  product_name varchar
+  categoria_principal varchar
+  rating decimal
+  rating_count int
+  discount_percentage decimal
+  actual_price_dollar decimal
+  discounted_price_dollar decimal
+  grupo_nota varchar [note: 'Bom / Intermediário / Ruim']
+  quadrante varchar [note: 'Estrela / Oportunidade / Atenção / Risco']
+  faixa_desconto varchar
+  Note: 'Dimensão central. Colunas omitidas: categoria_nivel2 a 5, preços em rupia e about_product.'
+}
+
+Table dReviewTexto [headercolor: #5B9BD5] {
+  product_id varchar [pk]
+  review_title text
+  review_content text
+  Note: 'Texto das reviews concatenado por produto'
+}
+
+Table dProduct_link_img [headercolor: #5B9BD5] {
+  product_id varchar [pk]
+  img_link_novo varchar
+  product_link varchar
+}
+
+Table dTemas [headercolor: #5B9BD5] {
+  palavra varchar [pk]
+  tema varchar
+  grupo varchar [note: 'Valor percebido / Problema']
+  Note: 'Dicionário de palavras-chave por tema'
+}
+
+Table fReview [headercolor: #ED7D31] {
+  product_id varchar
+  review_id varchar
+  user_id varchar
+
+  indexes {
+    (product_id, review_id) [pk]
+  }
+  Note: '1 linha por review de um produto'
+}
+
+Table dPalavras [headercolor: #ED7D31] {
+  product_id varchar
+  palavra varchar
+  qtd int
+
+  indexes {
+    (product_id, palavra) [pk]
+  }
+  Note: '1 linha por palavra em cada produto'
+}
+
+Ref: fReview.product_id > dProdutos.product_id
+Ref: dPalavras.product_id > dProdutos.product_id
+Ref: dPalavras.palavra > dTemas.palavra
+Ref: dReviewTexto.product_id - dProdutos.product_id
+Ref: dProduct_link_img.product_id - dProdutos.product_id
