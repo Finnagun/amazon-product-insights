@@ -114,6 +114,19 @@ RETURN
         )
     )
 
+// Faixas de desconto usadas na página Engajamento e satisfação (discount_percentage é fração: 0,25 = 25%)
+faixa_desconto =
+VAR d = dProdutos[discount_percentage]
+RETURN
+    SWITCH(
+        TRUE(),
+        ISBLANK(d), "Sem desconto",
+        d < 0.25, "0% - 25%",
+        d < 0.50, "25% - 50%",
+        d < 0.75, "50% - 75%",
+        "75% ou mais"
+    )
+
 // Usada na tabela de consulta do Portfólio (se existir no modelo)
 nome_curto =
 VAR t = TRIM(dProdutos[product_name])
@@ -142,3 +155,6 @@ RETURN
 // Observação: actual_price_dollar e discounted_price_dollar NÃO são colunas DAX. São criadas no
 // Power Query (dProdutos), multiplicando actual_price_rupia e discounted_price_rupia pelo
 // parâmetro TaxaINRUSD.
+
+// Observação: o campo "avaliação" da dProdutos não é fórmula DAX. É criado pela interface do Power BI
+// (agrupamento da nota em compartimentos) e alimenta o histograma "Distribuição de Notas".
