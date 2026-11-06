@@ -1,0 +1,13 @@
+# Power BI
+*.pbix.bak
+*.pbix.tmp
+.pbi/
+localSettings.json
+cache.abf
+
+# Dados brutos (baixar do Kaggle; ver data/raw/README.md)
+data/raw/*.csv
+
+# Sistema
+.DS_Store
+Thumbs.db

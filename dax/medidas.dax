@@ -1,0 +1,226 @@
+// Medidas e colunas calculadas do modelo final (extraídas do projeto do Power BI).
+// As medidas estão agrupadas pelas pastas de exibição da tabela "Medidas" (a barra invertida cria subpastas).
+
+// Unidade de análise: avaliações, nota e engajamento são medidos POR ANÚNCIO (variantes que compartilham reviews,
+// agrupadas em anuncio_id); contagem de produtos, preço, desconto, quadrantes e temas são medidos POR PRODUTO (product_id).
+
+// ---------------------------------------------------------------------
+// Pasta: 01 KPIs
+// ---------------------------------------------------------------------
+
+Total de produtos = DISTINCTCOUNT(dProdutos[product_id])
+
+Total de avaliações = SUMX(VALUES(dProdutos[anuncio_id]), CALCULATE(MAX(dProdutos[rating_count])))
+
+Nota média = AVERAGEX(VALUES(dProdutos[anuncio_id]), CALCULATE(MAX(dProdutos[rating])))
+
+Desconto médio (US$) =
+    AVERAGEX(
+        dProdutos,
+        dProdutos[actual_price_dollar] - dProdutos[discounted_price_dollar]
+    )
+
+Desconto médio (%) = AVERAGE(dProdutos[discount_percentage])
+
+Total de anúncios = DISTINCTCOUNT(dProdutos[anuncio_id])
+
+// ---------------------------------------------------------------------
+// Pasta: 02 Engajamento
+// ---------------------------------------------------------------------
+
+Média de avaliações = AVERAGEX(VALUES(dProdutos[anuncio_id]), CALCULATE(MAX(dProdutos[rating_count])))
+
+Mediana de avaliações = MEDIANX(VALUES(dProdutos[anuncio_id]), CALCULATE(MAX(dProdutos[rating_count])))
+
+// ---------------------------------------------------------------------
+// Pasta: 03 Concentração e quadrantes
+// ---------------------------------------------------------------------
+
+% acumulado de avaliações =
+    VAR QtdAtual = [Total de avaliações]
+    VAR Acumulado =
+        SUMX (
+            FILTER (
+                ALLSELECTED ( dProdutos[categoria_principal] ),
+                [Total de avaliações] >= QtdAtual
+            ),
+            [Total de avaliações]
+        )
+    RETURN
+        DIVIDE ( Acumulado, CALCULATE ( [Total de avaliações], ALL ( dProdutos ) ) )
+
+% do portfólio = DIVIDE ( [Total de produtos], CALCULATE ([Total de produtos], REMOVEFILTERS ( dProdutos[quadrante] ) ) )
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Base
+// ---------------------------------------------------------------------
+
+Produtos na seleção = COUNTROWS(dProdutos)
+
+Produtos com menção = DISTINCTCOUNT(dPalavras[product_id])
+
+Menções = SUM(dPalavras[qtd])
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Bons vs ruins
+// ---------------------------------------------------------------------
+
+% Produtos Bom = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Bom")
+
+Mais em Ruim (p.p.) = ([% Produtos Ruim] - [% Produtos Bom]) * 100
+
+Mais em Bom (p.p.) = ([% Produtos Bom] - [% Produtos Ruim]) * 100
+
+% Produtos Ruim = CALCULATE([% Produtos que mencionam], dProdutos[grupo_nota] = "Ruim")
+
+// ---------------------------------------------------------------------
+// Pasta: 04 Customer Insights\Temas
+// ---------------------------------------------------------------------
+
+Menções por produto = DIVIDE([Menções], [Produtos na seleção])
+
+% Produtos que mencionam = DIVIDE([Produtos com menção], [Produtos na seleção])
+
+// ---------------------------------------------------------------------
+// Pasta: 05 Preços e descontos
+// ---------------------------------------------------------------------
+
+Preço original médio (US$) = AVERAGE(dProdutos[actual_price_dollar])
+
+Preço com desconto médio (US$) = AVERAGE(dProdutos[discounted_price_dollar])
+
+Correlação desconto × nota =
+    VAR T = FILTER(dProdutos, NOT ISBLANK(dProdutos[discount_percentage]) && NOT ISBLANK(dProdutos[rating]))
+    VAR N = COUNTROWS(T)
+    VAR Sx = SUMX(T, dProdutos[discount_percentage])
+    VAR Sy = SUMX(T, dProdutos[rating])
+    VAR Sxy = SUMX(T, dProdutos[discount_percentage] * dProdutos[rating])
+    VAR Sxx = SUMX(T, dProdutos[discount_percentage] * dProdutos[discount_percentage])
+    VAR Syy = SUMX(T, dProdutos[rating] * dProdutos[rating])
+    RETURN
+        DIVIDE(N * Sxy - Sx * Sy, SQRT((N * Sxx - Sx * Sx) * (N * Syy - Sy * Sy)))
+
+Correlação preço × desconto =
+    VAR T = FILTER(dProdutos, NOT ISBLANK(dProdutos[actual_price_dollar]) && NOT ISBLANK(dProdutos[discount_percentage]))
+    VAR N = COUNTROWS(T)
+    VAR Sx = SUMX(T, dProdutos[actual_price_dollar])
+    VAR Sy = SUMX(T, dProdutos[discount_percentage])
+    VAR Sxy = SUMX(T, dProdutos[actual_price_dollar] * dProdutos[discount_percentage])
+    VAR Sxx = SUMX(T, dProdutos[actual_price_dollar] * dProdutos[actual_price_dollar])
+    VAR Syy = SUMX(T, dProdutos[discount_percentage] * dProdutos[discount_percentage])
+    RETURN
+        DIVIDE(N * Sxy - Sx * Sy, SQRT((N * Sxx - Sx * Sx) * (N * Syy - Sy * Sy)))
+
+// ---------------------------------------------------------------------
+// Pasta: 06 Recomendações
+// ---------------------------------------------------------------------
+
+Produtos em Estrela = CALCULATE([Total de produtos], dProdutos[quadrante] = "Estrela")
+
+Produtos em Risco = CALCULATE([Total de produtos], dProdutos[quadrante] = "Risco")
+
+Produtos em Oportunidade = CALCULATE([Total de produtos], dProdutos[quadrante] = "Oportunidade")
+
+Produtos em Atenção = CALCULATE([Total de produtos], dProdutos[quadrante] = "Atenção")
+
+% Atenção e Risco =
+    DIVIDE(CALCULATE([Total de produtos], dProdutos[quadrante] IN {"Atenção", "Risco"}), CALCULATE([Total de produtos], REMOVEFILTERS(dProdutos[quadrante])))
+
+// =====================================================================
+// Colunas calculadas (dProdutos)
+// =====================================================================
+
+// Bom: nota acima de 4,2 · Ruim: nota até 3,9 · Intermediário: o resto.
+grupo_nota =
+    VAR nota = dProdutos[rating]
+    RETURN
+        IF(
+            ISBLANK(nota),
+            BLANK(),
+            SWITCH(
+                TRUE(),
+                nota <= 3.9, "Ruim",
+                nota > 4.2, "Bom",
+                "Intermediário"
+            )
+        )
+
+// Quadrantes: nota e nº de avaliações do PRODUTO contra a mediana do portfólio (nota 4,1; avaliações 4.740).
+// Valores em branco são tratados como zero pelo DAX e caem no lado "baixo".
+quadrante =
+    VAR MedNota = MEDIAN ( dProdutos[rating] )
+    VAR MedAval = MEDIAN ( dProdutos[rating_count] )
+    RETURN
+        SWITCH (
+            TRUE (),
+            dProdutos[rating] >= MedNota && dProdutos[rating_count] >= MedAval, "Estrela",
+            dProdutos[rating] <  MedNota && dProdutos[rating_count] >= MedAval, "Risco",
+            dProdutos[rating] >= MedNota, "Oportunidade",
+            "Atenção"
+        )
+
+// discount_percentage é fração (0,25 = 25%).
+faixa_desconto =
+    VAR d = dProdutos[discount_percentage]
+    RETURN
+    SWITCH(
+        TRUE(),
+        ISBLANK(d), "Sem desconto",
+        d < 0.25, "0% - 25%",
+        d < 0.50, "25% - 50%",
+        d < 0.75, "50% - 75%",
+        "75% ou mais"
+    )
+
+// Compartimentos de nota (0,1) do histograma "Distribuição de notas": criada pela interface (Novo grupo > Compartimento).
+avaliação =
+    IF(
+    	ISBLANK('dProdutos'[rating]),
+    	BLANK(),
+    	IF(
+    		'dProdutos'[rating] >= 0,
+    		ROUNDDOWN('dProdutos'[rating] / 0.1, 0) * 0.1,
+    		ROUNDUP('dProdutos'[rating] / 0.1, 0) * 0.1
+    	)
+    )
+
+faixa_preco =
+    VAR p = dProdutos[actual_price_dollar]
+    RETURN
+        SWITCH(
+            TRUE(),
+            ISBLANK(p), "Sem preço",
+            p < 5, "até US$ 5",
+            p < 10, "US$ 5 a 10",
+            p < 25, "US$ 10 a 25",
+            p < 50, "US$ 25 a 50",
+            "acima de US$ 50"
+        )
+
+faixa_preco_ordem =
+    VAR p = dProdutos[actual_price_dollar]
+    RETURN
+        SWITCH(
+            TRUE(),
+            ISBLANK(p), 0,
+            p < 5, 1,
+            p < 10, 2,
+            p < 25, 3,
+            p < 50, 4,
+            5
+        )
+
+faixa_desconto_ordem =
+    VAR d = dProdutos[discount_percentage]
+    RETURN
+        SWITCH(
+            TRUE(),
+            ISBLANK(d), 5,
+            d < 0.25, 1,
+            d < 0.50, 2,
+            d < 0.75, 3,
+            4
+        )
+
+// Observação: actual_price_dollar, discounted_price_dollar e anuncio_id NÃO são colunas DAX: são criadas no Power Query
+// (dProdutos), a partir de TaxaINRUSD e da consulta MapaAnuncios.
