@@ -4,6 +4,12 @@ Dashboard em Power BI que analisa o portfólio de produtos de um marketplace (Am
 
 Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analytics (DTAT), desenvolvido pelo **Grupo 22**.
 
+## Acesse
+
+- **Vídeo da apresentação executiva:** [assistir no YouTube](https://youtu.be/JaqqyFAjEPw)
+- **Dashboard publicado** (para consultar de imediato, sem instalar nada): [abrir o dashboard](https://tinyurl.com/mrtptnpt)
+- **Arquivo do dashboard (`.pbix`):** em [`dashboard/`](dashboard/)
+
 ## Pergunta de negócio
 
 > Quais produtos, categorias e estratégias comerciais merecem maior atenção e quais oportunidades podem ser identificadas a partir dos dados disponíveis?
@@ -27,7 +33,7 @@ Projeto do **Tech Challenge – Fase 4** da pós-graduação POSTECH Data Analyt
 
 ## O dashboard
 
-O arquivo `.pbix` está em [`dashboard/`](dashboard/). As seis páginas seguem a estrutura sugerida no desafio:
+O dashboard está [publicado online](https://tinyurl.com/mrtptnpt) para consulta imediata, e o arquivo `.pbix` também está em [`dashboard/`](dashboard/). As seis páginas seguem a estrutura sugerida no desafio:
 
 | Página | O que responde |
 |---|---|
@@ -50,7 +56,11 @@ O arquivo `.pbix` está em [`dashboard/`](dashboard/). As seis páginas seguem a
 
 ![Recomendações](dashboard/img/06-recomendacoes.png)
 
-<!-- Quando o vídeo executivo estiver pronto, acrescente aqui a seção "## Vídeo executivo" com o link. -->
+## Vídeo executivo
+
+Apresentação para a liderança com o contexto, os indicadores, os insights, a demonstração do dashboard, os Customer Insights, as recomendações e as mensagens finais.
+
+[![Vídeo executivo](https://img.youtube.com/vi/JaqqyFAjEPw/hqdefault.jpg)](https://youtu.be/JaqqyFAjEPw)
 
 ## Principais insights
 
@@ -81,6 +91,8 @@ Os números vêm de uma amostra de reviews e a análise de texto é por palavras
 Detalhes, granularidade de cada tabela e justificativa em [`docs/modelo-e-metodologia.md`](docs/modelo-e-metodologia.md).
 
 ## Como reproduzir
+
+Para só consultar, use o [dashboard publicado](https://tinyurl.com/mrtptnpt). Para reproduzir o modelo no seu computador:
 
 1. Baixe o `amazon.csv` no Kaggle e salve em `data/raw/`.
 2. Abra o `.pbix` de `dashboard/` no **Power BI Desktop** (Windows).
