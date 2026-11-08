@@ -66,10 +66,10 @@ Apresentação para a liderança com o contexto, os indicadores, os insights, a 
 
 1. **O portfólio é concentrado.** Electronics (50,6%), Computers&Accessories (29,7%) e Home&Kitchen (18,1%) reúnem 98% das avaliações. As notas ficam entre 3,9 e 4,4 em 76% dos produtos, com pico em 4,1, e a nota média é de 4,08 por anúncio.
 2. **O desconto é alto e não traz engajamento.** O desconto médio é de US$ 25,06, ou 46,7% sobre o preço de tabela. A correlação entre desconto e nota é fraca e negativa (−0,16), e a mediana de avaliações por anúncio cai de 6,4 mil (descontos até 25%) para 2,2 mil (acima de 75%). É uma associação, não uma causa.
-3. **37% dos produtos pedem ação.** Pelos quadrantes, 35% dos produtos são Estrela, 28% Oportunidade, 22% Atenção e 15% Risco: 500 produtos em Atenção ou Risco. Home&Kitchen é a categoria mais exposta (cerca de 44% dos seus produtos nesses quadrantes), seguida de Electronics (40%).
+3. **37% dos produtos pedem ação.** Pelos quadrantes, 35% dos produtos são Estrela, 28% Oportunidade, 22% Atenção e 15% Risco: 500 produtos em Atenção ou Risco. Home&Kitchen é a categoria mais exposta, com cerca de 44% dos seus produtos nesses quadrantes, seguida de Electronics, com 40% (valor do gráfico da página Produtos e Categorias, que considera as subcategorias com 10 ou mais produtos em Atenção ou Risco; sem esse corte, Electronics tem 38%).
 4. **Há produtos bons que ninguém vê.** Os 373 produtos em Oportunidade têm boa nota e pouca visibilidade, e são os candidatos a ganhar destaque.
 5. **Os clientes comentam qualidade e preço.** Os dois temas aparecem em cerca de 87% dos produtos, contra 31% de atendimento e 29% de logística.
-6. **Produtos bons e ruins se separam por problemas e pós-venda, não por preço.** Os ruins citam mais insatisfação (32% contra 18%), defeito e falha (27% contra 17%) e devolução e troca (26% contra 17%). Os bons citam mais logística e atendimento.
+6. **Produtos bons e ruins se separam por problemas e pós-venda, não por preço.** Os ruins citam mais insatisfação (32,4% contra 17,9%), defeito e falha (27,4% contra 16,7%) e devolução e troca (26,2% contra 16,5%). Os bons citam mais logística e atendimento.
 
 Os números vêm de uma amostra de reviews e a análise de texto é por palavras-chave, sem considerar negação; as relações encontradas são associações.
 
